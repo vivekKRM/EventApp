@@ -30,61 +30,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String name = '';
 
   Future<void> getDashboard(String user_id) async {
-    if (user_id != "") {
-      final requestBody = {"user_id": user_id};
-      widget.appManager.apis
-          .getDashboardRequest(
-              requestBody, (prefs.getString('authToken') ?? ''))
-          .then((response) async {
-        // Handle successful response
-        if (response?.status == 200) {
-          //Success
-          prefs.setString('sId', response?.user?.id ?? '');
-          prefs.setString('authToken', response?.token ?? '');
-          setState(() {
-            name = response?.user?.first_name ??
-                '' +
-                    ' ' +
-                    (response?.user?.middle_name ?? '') +
-                    ' ' +
-                    (response?.user?.last_name ?? '');
-          });
-          await widget.appManager.markLoggedIn(response?.token ?? '');
-          await widget.appManager.initSocket(response?.token ?? '');
-          var loggedIn = await widget.appManager.hasLoggedIn();
-        } else if (response?.status == 201) {
-          showToast(response?.message ?? '', 2, kToastColor, context);
-        } else if (response?.status == 502) {
-          showLogoutDialog(BuildContext context) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return LogoutAlert(
-                  title: 'Active/Inactive Status',
-                  subtitle: response?.message ?? '',
-                  islogout: false,
-                  logoutAction: () async {
-                    await widget.appManager.clearLoggedIn();
-                    if (widget.appManager.islogout == true) {
-                      widget.appManager.utils.isPatientExitDialogShown = false;
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/obs', (route) => false);
-                    }
-                  },
-                );
-              },
-            );
-          }
-        } else {
-          print("Failed to get dashboard data");
-        }
-      }).catchError((error) {
-        // Handle error
-        print("Failed to get dashboard data: $error");
-      });
-    } else {
-      showToast('Please get user_id', 2, kToastColor, context);
-    }
+    // if (user_id != "") {
+    //   final requestBody = {"user_id": user_id};
+    //   widget.appManager.apis
+    //       .getDashboardRequest(
+    //           requestBody, (prefs.getString('authToken') ?? ''))
+    //       .then((response) async {
+    //     // Handle successful response
+    //     if (response?.status == 200) {
+    //       //Success
+    //       prefs.setString('sId', response?.user?.id ?? '');
+    //       prefs.setString('authToken', response?.token ?? '');
+    //       setState(() {
+    //         name = response?.user?.first_name ??
+    //             '' +
+    //                 ' ' +
+    //                 (response?.user?.middle_name ?? '') +
+    //                 ' ' +
+    //                 (response?.user?.last_name ?? '');
+    //       });
+    //       await widget.appManager.markLoggedIn(response?.token ?? '');
+    //       await widget.appManager.initSocket(response?.token ?? '');
+    //       var loggedIn = await widget.appManager.hasLoggedIn();
+    //     } else if (response?.status == 201) {
+    //       showToast(response?.message ?? '', 2, kToastColor, context);
+    //     } else if (response?.status == 502) {
+    //       showLogoutDialog(BuildContext context) {
+    //         showDialog(
+    //           context: context,
+    //           builder: (BuildContext context) {
+    //             return LogoutAlert(
+    //               title: 'Active/Inactive Status',
+    //               subtitle: response?.message ?? '',
+    //               islogout: false,
+    //               logoutAction: () async {
+    //                 await widget.appManager.clearLoggedIn();
+    //                 if (widget.appManager.islogout == true) {
+    //                   widget.appManager.utils.isPatientExitDialogShown = false;
+    //                   Navigator.pushNamedAndRemoveUntil(
+    //                       context, '/obs', (route) => false);
+    //                 }
+    //               },
+    //             );
+    //           },
+    //         );
+    //       }
+    //     } else {
+    //       print("Failed to get dashboard data");
+    //     }
+    //   }).catchError((error) {
+    //     // Handle error
+    //     print("Failed to get dashboard data: $error");
+    //   });
+    // } else {
+    //   showToast('Please get user_id', 2, kToastColor, context);
+    // }
   }
 
   Future<void> logout() async {

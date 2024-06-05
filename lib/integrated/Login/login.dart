@@ -1,3 +1,4 @@
+import 'package:event/constants/constants.dart';
 import 'package:event/constants/styles.dart';
 import 'package:event/utils/appManager.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,13 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key, required this.title, required this.appManager})
+  Login({Key? key, required this.title, required this.appManager, 
+  required this.email})
       : super(key: key);
 
   final String title;
   final AppManager appManager;
+  final String email;
 
   @override
   _LoginState createState() => _LoginState();
@@ -34,14 +37,14 @@ class _LoginState extends State<Login> {
     setState(() {
       _loading = true;
     });
-    widget.appManager.login(email, password).then(((response) async {
+    widget.appManager.login(emailController.text, passwordController.text).then(((response) async {
+      print(response);
       if (response?.status == 200) {
         setState(() {
           _loading = false;
         });
         prefs.setString('email', email);
         prefs.setString('password', password);
-        prefs.setString('sId', response?.user?.id ?? '');
         prefs.setString('authToken', response?.token ?? '');
         await widget.appManager.markLoggedIn(response?.token ?? '');
         await widget.appManager.initSocket(response?.token ?? '');
@@ -49,7 +52,11 @@ class _LoginState extends State<Login> {
         if (loggedIn['hasLoggedIn']) {
           Navigator.pushReplacementNamed(context, '/home', arguments: false);
         }
-      } else if (response?.status == 201) {
+
+        showToast(response?.message ?? '', 2, kToastColor);
+
+
+      } else if (response?.status == 202) {
         showToast(response?.message ?? '', 2, kToastColor);
         setState(() {
           _loading = false;
@@ -59,11 +66,7 @@ class _LoginState extends State<Login> {
           _loading = false;
         });
         showToast(response?.message ?? '', 2, kToastColor);
-        await this.widget.appManager.clearLoggedIn();
-        if (this.widget.appManager.islogout == true) {
-          this.widget.appManager.utils.isPatientExitDialogShown = false;
-          Navigator.pushNamedAndRemoveUntil(context, '/obs', (route) => false);
-        }
+       
       } else {
         setState(() {
           _loading = false;
@@ -119,7 +122,7 @@ class _LoginState extends State<Login> {
       Fluttertoast.showToast(
         msg: 'please enter valid email address',
         toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
+        // gravity: ToastGravity.TOP,
         backgroundColor: kToastColor,
       );
       return false;
@@ -128,7 +131,7 @@ class _LoginState extends State<Login> {
       Fluttertoast.showToast(
         msg: 'Password cannot contain spaces',
         toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
+        // gravity: ToastGravity.TOP,
         backgroundColor: kToastColor,
       );
       return false;
@@ -137,7 +140,7 @@ class _LoginState extends State<Login> {
       Fluttertoast.showToast(
         msg: 'please enter valid password, please try again',
         toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP,
+        // gravity: ToastGravity.TOP,
         backgroundColor: kToastColor,
       );
       return false;
@@ -154,27 +157,7 @@ class _LoginState extends State<Login> {
     }
   }
 
-  // Future<void> loginWithFacebook() async {
-  //   FacebookAuth.instance
-  //       .login(permissions: ['public_profile', 'email']).then((value) {
-  //     FacebookAuth.instance.getUserData().then((userData) async {
-  //       setState(() {
-  //         loginn = true;
-  //         _userObj = userData;
-  //         print(_userObj['name'] + _userObj['email']);
-  //       });
-  //     });
-  //   });
-  // }
-
-  // Future<void> logoutWithFacebook() async {
-  //   FacebookAuth.instance.logOut().then((value) {
-  //     setState(() {
-  //       loginn = false;
-  //       _userObj = {};
-  //     });
-  //   });
-  // }
+  
 
   @override
   void initState() {
@@ -183,24 +166,23 @@ class _LoginState extends State<Login> {
     getPrefs();
     fToast = FToast();
     fToast.init(context);
+    print(widget.email);
   }
 
   getPrefs() async {
     this.prefs = await SharedPreferences.getInstance();
     this.email = prefs.getString('email') ?? '';
     this.password = prefs.getString('password') ?? '';
+    setState(() {
+          emailController.text = widget.email;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 1.0,
-        backgroundColor: topHeaderBar,
-        surfaceTintColor: topHeaderBar,
-      ),
-      body: Container(
+   body: Container(
         color: backgroundColor,
         child: ListView(
           // physics: NeverScrollableScrollPhysics(),
@@ -210,15 +192,26 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    'assets/Nyka.png',
-                    height: size.height * 0.12,
-                    width: size.width * 0.6,
-                    fit: BoxFit.contain,
+
+                  Padding(
+                    padding: const EdgeInsets.only(top:50.0),
+                    child: Image.asset(
+                      'assets/Nyka.png',
+                      height: size.height * 0.12,
+                      width: size.width * 0.6,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  Text('Nyka', style: kLoginTextStyle),
-                  Text('This email address will be public.',
-                      style: kLoginSubTextStyle),
+                  
+                  Padding(
+                    padding: const EdgeInsets.only(top:40.0),
+                    child: Text('Login', style: kLoginTextStyle),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Enter your password here',
+                        style: kLoginSubTextStyle),
+                  ),
                   const SizedBox(height: 25),
                  Container(
                         padding:
@@ -232,7 +225,7 @@ class _LoginState extends State<Login> {
                           children: [
                             Icon(Icons.person_2_outlined,
                                 size: 20, color: kLoginIconColor),
-                            SizedBox(width: 10),
+                             SizedBox(width: 10),
                             Expanded(
                               child: TextFormField(
                                 keyboardType: TextInputType.emailAddress,
@@ -306,40 +299,19 @@ class _LoginState extends State<Login> {
                           ],
                         ),
                       ),
-                  SizedBox(height: 20,),
-                  Container(
-                    width: size.width,
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        this.forgetPassword();
-                      },
-                      child: Text('Forgot Password?',
-                          style: kForgotPasswordTextStyle),
-                    ),
-                  ),
+                
+              
                   SizedBox(height: 26),
                   _loading
                       ? CircularProgressIndicator()
-                      : Container(
-                          width: size.width,
-                          height: 65,
-                          // margin: EdgeInsets.only(bottom: 30),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              backgroundColor: kButtonColor,
-                            ),
-                            child: Text('LogIn', style: kButtonTextStyle),
-                            onPressed: () {
-                              if (isValidEmailAndPassword(email, password)) {
-                                login();
-                              }
-                            },
-                          ),
+                      : CustomButton(
+                          text: 'Log in',
+                          onPressed: () {
+                            if (isValidEmailAndPassword(emailController.text, 
+                            passwordController.text)) {
+                              login();
+                            }
+                          },
                         ),
                   SizedBox(height: 26),
                   Row(
@@ -351,19 +323,11 @@ class _LoginState extends State<Login> {
                           onTap: () {
                             this.forgetPassword();
                           },
-                          child: Text("Don't have an account? ",
-                              style: kForgotPasswordTextStyle),
+                          child: Text("Forgot Password? ",
+                              style: kForgotDetailTextStyle),
                         ),
                       ),
-                      Container(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, "/register");
-                            //  Navigator.pushNamed(context, "/passport", arguments:  false);
-                          },
-                          child: Text("Sign Up ", style: kSignUpTextStyle),
-                        ),
-                      ),
+                      
                     ],
                   ),
                 ],

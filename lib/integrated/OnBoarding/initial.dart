@@ -85,7 +85,7 @@ class _InitialScreenState extends State<InitialScreen> {
                   //   ),
                   // );
                 } else {
-                  Navigator.pushReplacementNamed(context, "/login");
+                  Navigator.pushReplacementNamed(context, "/emailverify");
                   // Navigator.pushReplacement(
                   //   context,
                   //   PageRouteBuilder(
