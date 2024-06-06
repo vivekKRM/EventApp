@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
           InitialScreen(title: 'SplashScreen', appManager: appManager),
       '/login': (context) => Login(title: 'Log - in', appManager: appManager),
       '/forgetPassword': (context) => ForgetPassword(title: 'Forget Password', appManager: appManager),
-      '/home': (context) => DashboardScreen(title: 'Home', appManager: appManager, isRegister: false),
+      '/home': (context) => DashboardScreen(title: 'Home', appManager: appManager),
       '/register': (context) => Register(title: 'Register', appManager: appManager),
       '/fregister': (context) => FinalRegister(title: 'Register', appManager: appManager),
       // Add more routes as needed
@@ -79,10 +79,10 @@ class _MyAppState extends State<MyApp> {
     appManager.currentPage = settings.name ?? '';
     Widget temp = routes[settings.name]?.call(context) ?? NotFoundScreen();
 
-    if (settings.name == '/home') {
-      final bool someValue = settings.arguments as bool;
-      temp = DashboardScreen(title: 'Home', appManager: appManager, isRegister: someValue);
-    }
+    // if (settings.name == '/home') {
+    //   final bool someValue = settings.arguments as bool;
+    //   temp = DashboardScreen(title: 'Home', appManager: appManager);
+    // }
 
     appManager.currentPageObject = temp;
 

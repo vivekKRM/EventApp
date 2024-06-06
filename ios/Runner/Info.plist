@@ -28,6 +28,24 @@
 	<string>Event wants to access your camera to capture a photo to update profile picture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Event wants to access Photo Library to select images to update profile picture.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>To enhance user experience and provide location-based services, Event utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>To enhance user experience and provide location-based services, Event utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.</string>
+	<key>GMSApiKey</key>
+	<string>AIzaSyCrCGPXfswRFDdMzSdEaGBnZiz9LQNFTCA</string>
+	<key>GMSPlacesClientApiKey</key>
+	<string>AIzaSyCrCGPXfswRFDdMzSdEaGBnZiz9LQNFTCA</string>
+	<key>NSAppTransportSecurity</key>
+		<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    	<true/>
+		</dict>
+
+
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

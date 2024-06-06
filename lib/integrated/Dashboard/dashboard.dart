@@ -11,12 +11,11 @@ class DashboardScreen extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.appManager,
-      required this.isRegister})
+  })
       : super(key: key);
 
   final String title;
   final AppManager appManager;
-  final bool isRegister;
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -127,86 +126,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Navigator.pop(context);
             logout();
           },
-        );
-      },
-    );
-  }
-
-  void _showCustomDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        final size = MediaQuery.of(context).size;
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          // child: Stack(
-          //   clipBehavior: Clip.none,
-          //   children: [
-          child: Container(
-            height: 280,
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 0),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/congrats.gif',
-                  width: 100,
-                  height: 100,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  textAlign: TextAlign.center,
-                  widget.isRegister
-                      ? "Welcome to SeaJob"
-                      : 'Welcome back to SeaJob',
-                  style: kCongratsTextStyle,
-                ),
-                SizedBox(height: 34),
-                Container(
-                  width: size.width,
-                  height: 65,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: kButtonColor,
-                    ),
-                    child: Text('Continue', style: kButtonTextStyle),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          //     Positioned(
-          //       right: -12,
-          //       top: -10,
-          //       child: GestureDetector(
-          //         onTap: () {
-          //           Navigator.of(context).pop();
-          //         },
-          //         child: Image.asset(
-          //           'assets/cross.png',
-          //           width: 40,
-          //           height: 40,
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
         );
       },
     );

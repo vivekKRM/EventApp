@@ -3,7 +3,6 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:event/constants/styles.dart';
-import 'package:event/integrated/Register/placeSearchScreen.dart';
 import 'package:event/utils/appManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -44,9 +43,9 @@ class _FinalRegisterState extends State<FinalRegister> {
     false,
   ];
 
-
   bool isValidForm() {
     isError.clear();
+
     isError = [
       false,
       false,
@@ -55,7 +54,7 @@ class _FinalRegisterState extends State<FinalRegister> {
       false,
       false,
     ];
-   if (_fnameController.text == '') {
+    if (_fnameController.text == '') {
       showToast('Please enter first name', 2, kToastColor, context);
       setState(() {
         isError[0] = true;
@@ -80,15 +79,13 @@ class _FinalRegisterState extends State<FinalRegister> {
       });
       return false;
     } else if (_locationController.text == '') {
-      showToast(
-          'Please select location', 2, kToastColor, context);
+      showToast('Please select location', 2, kToastColor, context);
       setState(() {
         isError[4] = true;
       });
       return false;
     } else if (_mobileController.text.length < 10) {
-      showToast(
-          'please enter valid mobile number', 2, kToastColor, context);
+      showToast('please enter valid mobile number', 2, kToastColor, context);
       setState(() {
         isError[5] = true;
       });
@@ -240,6 +237,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLoginTextFieldFillColor,
+                  border: isError[0]
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: kLoginTextFieldFillColor),
                 ),
                 child: Row(
                   children: [
@@ -272,6 +272,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLoginTextFieldFillColor,
+                  border: isError[1]
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: kLoginTextFieldFillColor),
                 ),
                 child: Row(
                   children: [
@@ -304,6 +307,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLoginTextFieldFillColor,
+                  border: isError[2]
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: kLoginTextFieldFillColor),
                 ),
                 child: Row(
                   children: [
@@ -333,6 +339,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLoginTextFieldFillColor,
+                  border: isError[3]
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: kLoginTextFieldFillColor),
                 ),
                 child: Row(
                   children: [
@@ -361,6 +370,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLoginTextFieldFillColor,
+                  border: isError[4]
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: kLoginTextFieldFillColor),
                 ),
                 child: Row(
                   children: [
@@ -378,25 +390,18 @@ class _FinalRegisterState extends State<FinalRegister> {
                         ),
                         onTapAlwaysCalled: true,
                         onTap: () async {
-                          // final selectedPlace = await Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => PlaceSearchScreen()),
-                          // );
-                          // if (selectedPlace != null) {
-                          //   setState(() {
-                          //     _locationController.text =
-                          //         selectedPlace.description;
-                          //   });
-                          // }
-
                           Prediction? p = await PlacesAutocomplete.show(
-                              context: context, apiKey: _apiKey, mode: _mode);
-                          // Do something with the selected prediction
+                            context: context,
+                            apiKey: _apiKey,
+                            mode: Mode.overlay, // or Mode.fullscreen
+                            language: "en",
+                            components: [Component(Component.country, "us")],
+                          );
+
+                          // Handle the selected prediction
                           if (p != null) {
-                            // Set the selected place in the text field
                             _locationController.text = p.description ?? '';
-                            // Navigator.pop(context, p);
+                            // You can also use p.placeId to get more details about the place if needed
                           }
                         },
                       ),
@@ -413,6 +418,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kLoginTextFieldFillColor,
+                  border: isError[5]
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: kLoginTextFieldFillColor),
                 ),
                 child: Row(
                   children: [
