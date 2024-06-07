@@ -1,3 +1,4 @@
+import 'package:event/NewUser/NewUser.dart';
 import 'package:event/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:event/constants/styles.dart';
@@ -39,11 +40,13 @@ class _EmailVerifyState extends State<EmailVerify> {
         });
         prefs.setString('email', email);
         var loggedIn = await widget.appManager.hasLoggedIn();
-        if (loggedIn['hasLoggedIn']) {
-          Navigator.pushReplacementNamed(context, '/login', arguments: email);
-        }
+        // if (loggedIn['hasLoggedIn']) {
+        //   Navigator.pushReplacementNamed(context, '/login', arguments: email);
+        // }
+        Navigator.pushNamed(context, "/login",arguments: email);
+
       } else if (response?.status == 202) {
-        Navigator.pushReplacementNamed(context, '/login', arguments: email);
+        Navigator.pushNamed(context, "/newuser",arguments: email);
         showToast(response?.message ?? '', 2, kToastColor);
         setState(() {
           _loading = false;

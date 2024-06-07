@@ -1,4 +1,5 @@
 import 'package:event/EmailVerify/EmailVerify.dart';
+import 'package:event/NewUser/NewUser.dart';
 import 'package:event/integrated/Dashboard/dashboard.dart';
 import 'package:event/integrated/Forget/forgetPassword.dart';
 import 'package:event/integrated/Login/login.dart';
@@ -46,12 +47,17 @@ class _MyAppState extends State<MyApp> {
       // Integrated routes
       '/': (context) =>
           InitialScreen(title: 'SplashScreen', appManager: appManager),
-                '/emailverify': (context) => EmailVerify(title: 'Email Verify', appManager: appManager),
-
-      '/forgetPassword': (context) => ForgetPassword(title: 'Forget Password', appManager: appManager),
-      '/home': (context) => DashboardScreen(title: 'Home', appManager: appManager, isRegister: false),
-      '/register': (context) => Register(title: 'Register', appManager: appManager),
-      '/fregister': (context) => FinalRegister(title: 'Register', appManager: appManager),
+      '/emailverify': (context) =>
+          EmailVerify(title: 'Email Verify', appManager: appManager),
+      
+      '/forgetPassword': (context) =>
+          ForgetPassword(title: 'Forget Password', appManager: appManager),
+      '/home': (context) => DashboardScreen(
+          title: 'Home', appManager: appManager, isRegister: false),
+      '/register': (context) =>
+          Register(title: 'Register', appManager: appManager),
+      '/fregister': (context) =>
+          FinalRegister(title: 'Register', appManager: appManager),
       // Add more routes as needed
     };
   }
@@ -68,7 +74,8 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       builder: (context, child) {
-        widget.prefs.setDouble("textScalingFactor", MediaQuery.of(context).textScaleFactor);
+        widget.prefs.setDouble(
+            "textScalingFactor", MediaQuery.of(context).textScaleFactor);
         return MediaQuery(
           child: child ?? Container(),
           data: MediaQuery.of(context).copyWith(textScaleFactor: 0.845),
@@ -77,7 +84,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
- Route<dynamic> _getRoute(RouteSettings settings) {
+  Route<dynamic> _getRoute(RouteSettings settings) {
     appManager.currentPage = settings.name ?? '';
     Widget temp;
     return PageRouteBuilder(
@@ -90,14 +97,18 @@ class _MyAppState extends State<MyApp> {
           case '/login':
             final String someValue = settings.arguments as String;
             temp = Login(
-                title: 'Login',
-                appManager: appManager,
-                email: someValue,
-                );
+              title: 'Login',
+              appManager: appManager,
+              email: someValue,
+            );
             break;
 
-
-
+            case '/newuser':
+            final String value = settings.arguments as String;
+            temp = NewUser(title: 'New User',
+             appManager: appManager, 
+             email: value);
+             break;
           default:
             temp = routes[settings.name]!(context);
         }
@@ -134,7 +145,8 @@ class _MyAppState extends State<MyApp> {
         await launchUrl(url);
       } else {
         const playStorePackageName = 'com.docuvitals.health';
-        final playStoreURL = 'https://play.google.com/store/apps/details?id=$playStorePackageName';
+        final playStoreURL =
+            'https://play.google.com/store/apps/details?id=$playStorePackageName';
 
         if (await canLaunch(playStoreURL)) {
           await launch(playStoreURL);

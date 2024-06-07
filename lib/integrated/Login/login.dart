@@ -1,6 +1,7 @@
 import 'package:event/constants/constants.dart';
 import 'package:event/constants/styles.dart';
 import 'package:event/utils/appManager.dart';
+import 'package:event/widgets/customAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +9,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key, required this.title, required this.appManager, 
-  required this.email})
+  Login(
+      {Key? key,
+      required this.title,
+      required this.appManager,
+      required this.email})
       : super(key: key);
 
   final String title;
@@ -37,7 +41,9 @@ class _LoginState extends State<Login> {
     setState(() {
       _loading = true;
     });
-    widget.appManager.login(emailController.text, passwordController.text).then(((response) async {
+    widget.appManager
+        .login(emailController.text, passwordController.text)
+        .then(((response) async {
       print(response);
       if (response?.status == 200) {
         setState(() {
@@ -54,8 +60,6 @@ class _LoginState extends State<Login> {
         }
 
         showToast(response?.message ?? '', 2, kToastColor);
-
-
       } else if (response?.status == 202) {
         showToast(response?.message ?? '', 2, kToastColor);
         setState(() {
@@ -66,7 +70,6 @@ class _LoginState extends State<Login> {
           _loading = false;
         });
         showToast(response?.message ?? '', 2, kToastColor);
-       
       } else {
         setState(() {
           _loading = false;
@@ -107,7 +110,7 @@ class _LoginState extends State<Login> {
         positionedToastBuilder: (context, child) {
           return Positioned(
             child: child,
-            top: 100.0,
+            bottom: 100.0,
           );
         });
   }
@@ -126,23 +129,15 @@ class _LoginState extends State<Login> {
         backgroundColor: kToastColor,
       );
       return false;
-    } else if (password.contains(' ')) {
-      errorText = 'Password cannot contain spaces';
+    } else if (password.contains(' ') || password.isEmpty) {
+      errorText = 'Password can not be empty or contain spaces';
       Fluttertoast.showToast(
-        msg: 'Password cannot contain spaces',
+        msg: 'Password can not be empty or contain spaces',
         toastLength: Toast.LENGTH_LONG,
         // gravity: ToastGravity.TOP,
         backgroundColor: kToastColor,
       );
-      return false;
-    } else if (password.length < 6) {
-      errorText = 'please enter valid password, please try again';
-      Fluttertoast.showToast(
-        msg: 'please enter valid password, please try again',
-        toastLength: Toast.LENGTH_LONG,
-        // gravity: ToastGravity.TOP,
-        backgroundColor: kToastColor,
-      );
+
       return false;
     } else {
       return true;
@@ -156,8 +151,6 @@ class _LoginState extends State<Login> {
       throw 'Could not launch $urlhit';
     }
   }
-
-  
 
   @override
   void initState() {
@@ -174,7 +167,7 @@ class _LoginState extends State<Login> {
     this.email = prefs.getString('email') ?? '';
     this.password = prefs.getString('password') ?? '';
     setState(() {
-          emailController.text = widget.email;
+      emailController.text = widget.email;
     });
   }
 
@@ -182,7 +175,13 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-   body: Container(
+      appBar: CustomAppBarr(
+        backgroundColor: backgroundColor,
+        leadingIconColor: Colors.black,
+        titleText: '',
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+      ),
+      body: Container(
         color: backgroundColor,
         child: ListView(
           // physics: NeverScrollableScrollPhysics(),
@@ -192,9 +191,8 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-
                   Padding(
-                    padding: const EdgeInsets.only(top:50.0),
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Image.asset(
                       'assets/Nyka.png',
                       height: size.height * 0.12,
@@ -202,9 +200,9 @@ class _LoginState extends State<Login> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  
+
                   Padding(
-                    padding: const EdgeInsets.only(top:40.0),
+                    padding: const EdgeInsets.only(top: 40.0),
                     child: Text('Login', style: kLoginTextStyle),
                   ),
                   Padding(
@@ -213,102 +211,98 @@ class _LoginState extends State<Login> {
                         style: kLoginSubTextStyle),
                   ),
                   const SizedBox(height: 25),
-                 Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 14, horizontal: 15),
-                        margin: EdgeInsets.only(bottom: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: kLoginTextFieldFillColor,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.person_2_outlined,
-                                size: 20, color: kLoginIconColor),
-                             SizedBox(width: 10),
-                            Expanded(
-                              child: TextFormField(
-                                keyboardType: TextInputType.emailAddress,
-                                controller: emailController,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  isDense: true,
-                                  hintText: 'Email address',
-                                  hintStyle: kLoginTextFieldTextStyle,
-                                ),
-                                onChanged: (value) {
-                                  setState(() {
-                                    email = value;
-                                  });
-                                },
-                               
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+                    margin: EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: kLoginTextFieldFillColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.person_2_outlined,
+                            size: 20, color: kLoginIconColor),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              isDense: true,
+                              hintText: 'Email address',
+                              hintStyle: kLoginTextFieldTextStyle,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                email = value;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   // SizedBox(height: 20),
                   Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 14, horizontal: 15),
-                        margin: EdgeInsets.only(bottom: 18),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: kLoginTextFieldFillColor,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.lock_open_outlined,
-                                size: 20, color: kLoginIconColor),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: TextFormField(
-                                controller: passwordController,
-                                obscureText: obscureText,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  // contentPadding:
-                                  //     EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                                  isDense: true,
-                                  hintText: 'Password',
-                                  hintStyle: kLoginTextFieldTextStyle,
-                                ),
-                                onChanged: (value) {
-                                  this.setState(() {
-                                    password = value;
-                                  });
-                                },
-                              ),
+                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 15),
+                    margin: EdgeInsets.only(bottom: 18),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: kLoginTextFieldFillColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.lock_open_outlined,
+                            size: 20, color: kLoginIconColor),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: TextFormField(
+                            controller: passwordController,
+                            obscureText: obscureText,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              // contentPadding:
+                              //     EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                              isDense: true,
+                              hintText: 'Password',
+                              hintStyle: kLoginTextFieldTextStyle,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  obscureText = !obscureText;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(0.0),
-                                child: Icon(
-                                  obscureText
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: kButtonColor,
-                                ),
-                              ),
-                            ),
-                          ],
+                            onChanged: (value) {
+                              this.setState(() {
+                                password = value;
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                
-              
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              obscureText = !obscureText;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Icon(
+                              obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                              color: kButtonColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   SizedBox(height: 26),
                   _loading
                       ? CircularProgressIndicator()
                       : CustomButton(
                           text: 'Log in',
                           onPressed: () {
-                            if (isValidEmailAndPassword(emailController.text, 
-                            passwordController.text)) {
+                            if (isValidEmailAndPassword(emailController.text,
+                                passwordController.text)) {
                               login();
                             }
                           },
@@ -327,7 +321,6 @@ class _LoginState extends State<Login> {
                               style: kForgotDetailTextStyle),
                         ),
                       ),
-                      
                     ],
                   ),
                 ],

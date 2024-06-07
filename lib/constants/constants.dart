@@ -5,7 +5,10 @@ class Constants {
   static const MAP_REGEXP = '.* id="(.*)" title="(.*)" .* d="(.*)"';
   static const MAP_SIZE_REGEXP = '<svg.* height="(.*)" width="(.*)"';
   static const ASSETS_PATH = 'assets/images';
+
 }
+
+
 
 
 class CustomButton extends StatelessWidget {
@@ -37,5 +40,43 @@ class CustomButton extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class CustomAppBarr extends StatelessWidget implements PreferredSizeWidget {
+  final Color backgroundColor;
+  final Color leadingIconColor;
+  final String titleText;
+  final TextStyle titleTextStyle;
+  final VoidCallback? onLeadingIconPressed;
+
+  CustomAppBarr({
+    required this.backgroundColor,
+    required this.leadingIconColor,
+    required this.titleText,
+    required this.titleTextStyle,
+    this.onLeadingIconPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: backgroundColor,
+      surfaceTintColor: backgroundColor,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: leadingIconColor),
+        onPressed: onLeadingIconPressed ?? () {
+          Navigator.pop(context);
+        },
+      ),
+      title: Text(
+        titleText,
+        style: titleTextStyle,
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
