@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:math';
+import 'package:event/EmailVerify/EmailVerifyJSON.dart';
 import 'package:event/constants/styles.dart';
 import 'package:event/json/login-json.dart';
 import 'package:event/utils/apis.dart';
@@ -27,7 +28,8 @@ var me = 'd-apple';
 
 class AppManager {
   late http.Client client;
-  String serverURL = 'https://bizhawkztest.com/seajobs/api';
+  
+  String serverURL = 'https://app.ewomennetwork.com/ewomen/api';
   late IO.Socket socket;
   late Apis apis;
   late General utils;
@@ -74,15 +76,15 @@ class AppManager {
     islogout = true;
   }
 
-  Future<LoginResponse?> login(email, password) async {
-    email = email ?? "";
-    password = password ?? "";
+  Future<LoginResponse?> login(String email, String password) async {
     if (email != "" && password != "") {
       var client = http.Client();
       try {
-        print("sending request to $serverURL/login\n\"$email\"\n$password");
+        print("sending request to $serverURL/login\n\"$email, $password");
         var uriResponse = await client.post(Uri.parse('$serverURL/login'),
-            body: {'username': email.trim().toLowerCase(), 'password': password});
+            body: {'email': email.trim().toLowerCase(),
+            'password':password});
+          
         this.log('app.auth', 'uriResponse ${uriResponse.body}');
         if (uriResponse.body != null) {
           Map<String, dynamic> respMap = jsonDecode(uriResponse.body);
@@ -96,49 +98,29 @@ class AppManager {
     return null;
   }
 
+  Future<Emailverifyjson?> emailverify(email) async {
+    email = email ?? "";
   
+    if (email != "" ) {
+      var client = http.Client();
+      try {
+        print("sending request to $serverURL/email_verify\n\"$email");
+        var uriResponse = await client.post(Uri.parse('$serverURL/email_verify'),
+            body: {'email': email.trim().toLowerCase(), });
+        this.log('app.auth', 'uriResponse ${uriResponse.body}');
+        if (uriResponse.body != null) {
+          Map<String, dynamic> respMap = jsonDecode(uriResponse.body);
+          var user = Emailverifyjson.fromJson(respMap);
+          return user;
+        }
+      } finally {
+        client.close();
+      }
+    }
+    return null;
+  }
 
-  // Future<LoginResponse?> changePassword(
-  //     String password, bool forgotPasswordMode) async {
-  //   var client = http.Client();
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   print("prefs.getString('email') ${prefs.getString('email')}");
-  //   print("prefs.getString('email') ${prefs.getString('oldPassword')}");
-  //   print("prefs.getString('email') ${prefs.getString('sId')}");
-  //   print("prefs.getString('email') ${prefs.getString('hospital')}");
-  //   try {
-  //     var uriResponse =
-  //         await client.post(Uri.parse('$serverURL/api/changePassword'), body: {
-  //       'email': prefs.getString('email'),
-  //       'newPassword': password,
-  //       'oldPassword': prefs.getString('oldPassword'),
-  //       "id": prefs.getString('sId'),
-  //       "hospital": prefs.getString('hospital'),
-  //       "forgotPasswordMode": '$forgotPasswordMode'
-  //     });
-  //     print("change pasword $password $forgotPasswordMode");
-  //     this.log('app.auth', 'uriResponse ${uriResponse.body}');
-  //     if (uriResponse.body != null) {
-  //       Map<String, dynamic> respMap = jsonDecode(uriResponse.body);
-  //       var user = LoginResponse.fromJson(respMap);
-  //       if (user?.result?.msg != null) {
-  //         Fluttertoast.showToast(
-  //           msg: user?.result?.msg ?? '',
-  //           toastLength: Toast.LENGTH_LONG,
-  //           gravity: ToastGravity.TOP,
-  //           backgroundColor: kToastColor,
-  //         );
-  //       } else {
-  //         prefs.remove('oldPassword');
-  //       }
-  //       return user;
-  //     }
-  //   } finally {
-  //     client.close();
-  //   }
-  //   return null;
-  // }
-
+  
   initSocket(String authToken) async {
     socket = IO.io(
         serverURL,

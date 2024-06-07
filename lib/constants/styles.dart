@@ -19,7 +19,7 @@ final kDashboardColor = Color(0xFF09B3BE);
 
 final topHeaderBar = Color(0xFFF6F7FB);
 final backgroundColor = Color(0xFFF6F7FB);
-final kButtonColor = Color(0xFF00A3AD);
+final kButtonColor = Color(0xFFD14D4D);
 final kCursorErrorColor = Color(0xFFD14D4D);
 
 //OnBoarding
@@ -36,7 +36,7 @@ TextStyle kObsText = TextStyle(
 );
 
 TextStyle kButtonTextStyle = TextStyle(
-  fontSize: 24,
+  fontSize: 20,
   color: Colors.white,
   fontWeight: FontWeight.w600,
 );

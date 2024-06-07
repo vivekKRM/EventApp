@@ -1,3 +1,4 @@
+import 'package:event/EmailVerify/EmailVerify.dart';
 import 'package:event/integrated/Dashboard/dashboard.dart';
 import 'package:event/integrated/Forget/forgetPassword.dart';
 import 'package:event/integrated/Login/login.dart';
@@ -45,7 +46,8 @@ class _MyAppState extends State<MyApp> {
       // Integrated routes
       '/': (context) =>
           InitialScreen(title: 'SplashScreen', appManager: appManager),
-      '/login': (context) => Login(title: 'Log - in', appManager: appManager),
+                '/emailverify': (context) => EmailVerify(title: 'Email Verify', appManager: appManager),
+
       '/forgetPassword': (context) => ForgetPassword(title: 'Forget Password', appManager: appManager),
       '/home': (context) => DashboardScreen(title: 'Home', appManager: appManager),
       '/register': (context) => Register(title: 'Register', appManager: appManager),
@@ -75,14 +77,14 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Route<dynamic> _getRoute(RouteSettings settings) {
+ Route<dynamic> _getRoute(RouteSettings settings) {
     appManager.currentPage = settings.name ?? '';
     Widget temp = routes[settings.name]?.call(context) ?? NotFoundScreen();
 
-    // if (settings.name == '/home') {
-    //   final bool someValue = settings.arguments as bool;
-    //   temp = DashboardScreen(title: 'Home', appManager: appManager);
-    // }
+    if (settings.name == '/home') {
+      final bool someValue = settings.arguments as bool;
+      temp = DashboardScreen(title: 'Home', appManager: appManager);
+    }
 
     appManager.currentPageObject = temp;
 
@@ -91,13 +93,32 @@ class _MyAppState extends State<MyApp> {
         BuildContext context,
         Animation<double> animation,
         Animation<double> secondaryAnimation,
-      ) => temp,
+      ) {
+        switch (settings.name) {
+          case '/login':
+            final String someValue = settings.arguments as String;
+            temp = Login(
+                title: 'Login',
+                appManager: appManager,
+                email: someValue,
+                );
+            break;
+
+
+
+          default:
+            temp = routes[settings.name]!(context);
+        }
+        this.appManager.currentPageObject = temp;
+        return temp;
+      },
       transitionsBuilder: (
         BuildContext context,
         Animation<double> animation,
         Animation<double> secondaryAnimation,
         Widget child,
-      ) => SlideTransition(
+      ) =>
+          SlideTransition(
         position: Tween<Offset>(
           begin: const Offset(1, 0),
           end: Offset.zero,
