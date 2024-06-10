@@ -321,7 +321,7 @@
     },
     {
       "name": "google_api_headers",
-      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/google_api_headers-1.0.0",
+      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/google_api_headers-1.6.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -566,22 +566,16 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "package_info",
-      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/package_info-2.0.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "package_info_plus",
-      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/package_info_plus-8.0.0",
+      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/package_info_plus-4.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "2.18"
     },
     {
       "name": "package_info_plus_platform_interface",
-      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/package_info_plus_platform_interface-3.0.0",
+      "rootUri": "file:///Users/uis/.pub-cache/hosted/pub.dev/package_info_plus_platform_interface-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.12"
     },
     {
       "name": "path",
@@ -956,7 +950,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-07T04:56:43.758322Z",
+  "generated": "2024-06-10T07:14:16.724684Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }

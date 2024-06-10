@@ -1,0 +1,12 @@
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-core-1.6.0-0 /Users/uis/.gradle/caches/transforms-3/26a1370e2e3ee4484871e887912ac65c/transformed/core-1.6.0/res
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-jetified-annotation-experimental-1.1.0-1 /Users/uis/.gradle/caches/transforms-3/61f0d9cd5163c85aca9f9610c1190703/transformed/jetified-annotation-experimental-1.1.0/res
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-jetified-window-java-1.0.0-beta04-2 /Users/uis/.gradle/caches/transforms-3/63d93cc176de6e33e3e3d05b8f165b64/transformed/jetified-window-java-1.0.0-beta04/res
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-jetified-window-1.0.0-beta04-3 /Users/uis/.gradle/caches/transforms-3/e60c7207e64f7de078c98aab65d167ba/transformed/jetified-window-1.0.0-beta04/res
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-main-4 /Users/uis/.pub-cache/hosted/pub.dev/flutter_app_badger-1.5.0/android/src/main/res
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-release-5 /Users/uis/.pub-cache/hosted/pub.dev/flutter_app_badger-1.5.0/android/src/release/res
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-pngs-6 /Users/uis/Desktop/EventApp/build/flutter_app_badger/generated/res/pngs/release
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-resValues-7 /Users/uis/Desktop/EventApp/build/flutter_app_badger/generated/res/resValues/release
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-rs-8 /Users/uis/Desktop/EventApp/build/flutter_app_badger/generated/res/rs/release
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-mergeReleaseResources-9 /Users/uis/Desktop/EventApp/build/flutter_app_badger/intermediates/incremental/release/mergeReleaseResources/merged.dir
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-mergeReleaseResources-10 /Users/uis/Desktop/EventApp/build/flutter_app_badger/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+fr.g123k.flutterappbadge.flutterappbadger.flutter_app_badger-merged_res-11 /Users/uis/Desktop/EventApp/build/flutter_app_badger/intermediates/merged_res/release

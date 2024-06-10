@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class CustomAppbar extends StatelessWidget {
   final Widget leading;
   final String titleText;
+  final Widget rightButton;
   final BuildContext context;
 
   CustomAppbar({
     required this.leading,
     required this.titleText,
     required this.context,
+    required this.rightButton,
   });
 
   @override
@@ -38,16 +40,7 @@ class CustomAppbar extends StatelessWidget {
                 ],
               ),
             ),
-            InkWell(
-              onTap: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-              child: Image(
-                width: 30,
-                height: 30,
-                image: AssetImage('assets/tab.png'),
-              ),
-            ),
+            rightButton, // Add the right button here
           ],
         ),
       ),

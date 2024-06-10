@@ -66,18 +66,6 @@ class _FinalRegisterState extends State<FinalRegister> {
         isError[1] = true;
       });
       return false;
-    } else if (_titleController.text == '') {
-      showToast('Please enter title', 2, kToastColor, context);
-      setState(() {
-        isError[2] = true;
-      });
-      return false;
-    } else if (_companyController.text == '') {
-      showToast('Please enter company', 2, kToastColor, context);
-      setState(() {
-        isError[3] = true;
-      });
-      return false;
     } else if (_locationController.text == '') {
       showToast('Please select location', 2, kToastColor, context);
       setState(() {
@@ -252,7 +240,7 @@ class _FinalRegisterState extends State<FinalRegister> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'First Name',
+                          hintText: 'First Name*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
                         // onChanged: (value) {
@@ -287,7 +275,7 @@ class _FinalRegisterState extends State<FinalRegister> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'Last Name',
+                          hintText: 'Last Name*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
                         // onChanged: (value) {
@@ -381,29 +369,29 @@ class _FinalRegisterState extends State<FinalRegister> {
                     Expanded(
                       child: TextFormField(
                         controller: _locationController,
-                        readOnly: true,
+                        // readOnly: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
                           hintText: 'Search your location*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
-                        onTapAlwaysCalled: true,
-                        onTap: () async {
-                          Prediction? p = await PlacesAutocomplete.show(
-                            context: context,
-                            apiKey: _apiKey,
-                            mode: Mode.overlay, // or Mode.fullscreen
-                            language: "en",
-                            components: [Component(Component.country, "us")],
-                          );
+                        // onTapAlwaysCalled: true,
+                        // onTap: () async {
+                        //   Prediction? p = await PlacesAutocomplete.show(
+                        //     context: context,
+                        //     apiKey: _apiKey,
+                        //     mode: Mode.overlay, // or Mode.fullscreen
+                        //     language: "en",
+                        //     components: [Component(Component.country, "us")],
+                        //   );
 
-                          // Handle the selected prediction
-                          if (p != null) {
-                            _locationController.text = p.description ?? '';
-                            // You can also use p.placeId to get more details about the place if needed
-                          }
-                        },
+                        //   // Handle the selected prediction
+                        //   if (p != null) {
+                        //     _locationController.text = p.description ?? '';
+                        //     // You can also use p.placeId to get more details about the place if needed
+                        //   }
+                        // },
                       ),
                     ),
                   ],
@@ -432,7 +420,7 @@ class _FinalRegisterState extends State<FinalRegister> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'Mobile Number',
+                          hintText: 'Mobile Number*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
                       ),
@@ -487,7 +475,7 @@ class _FinalRegisterState extends State<FinalRegister> {
                   child: Text('SignUp', style: kButtonTextStyle),
                   onPressed: () {
                     if (isValidForm()) {
-                      Navigator.pushNamed(context, "/fregister");
+                      // Navigator.pushNamed(context, "/fregister");
                     }
                   },
                 ),

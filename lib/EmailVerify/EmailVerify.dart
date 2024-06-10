@@ -39,9 +39,9 @@ class _EmailVerifyState extends State<EmailVerify> {
         });
         prefs.setString('email', email);
         var loggedIn = await widget.appManager.hasLoggedIn();
-        if (loggedIn['hasLoggedIn']) {
+        // if (loggedIn['hasLoggedIn']) {
           Navigator.pushReplacementNamed(context, '/login', arguments: email);
-        }
+        // }
       } else if (response?.status == 202) {
         Navigator.pushReplacementNamed(context, '/login', arguments: email);
         showToast(response?.message ?? '', 2, kToastColor);

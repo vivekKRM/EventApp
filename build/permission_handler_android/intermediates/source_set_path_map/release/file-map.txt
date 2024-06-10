@@ -1,0 +1,12 @@
+com.baseflow.permissionhandler.permission_handler_android-core-1.6.0-0 /Users/uis/.gradle/caches/transforms-3/26a1370e2e3ee4484871e887912ac65c/transformed/core-1.6.0/res
+com.baseflow.permissionhandler.permission_handler_android-jetified-annotation-experimental-1.1.0-1 /Users/uis/.gradle/caches/transforms-3/61f0d9cd5163c85aca9f9610c1190703/transformed/jetified-annotation-experimental-1.1.0/res
+com.baseflow.permissionhandler.permission_handler_android-jetified-window-java-1.0.0-beta04-2 /Users/uis/.gradle/caches/transforms-3/63d93cc176de6e33e3e3d05b8f165b64/transformed/jetified-window-java-1.0.0-beta04/res
+com.baseflow.permissionhandler.permission_handler_android-jetified-window-1.0.0-beta04-3 /Users/uis/.gradle/caches/transforms-3/e60c7207e64f7de078c98aab65d167ba/transformed/jetified-window-1.0.0-beta04/res
+com.baseflow.permissionhandler.permission_handler_android-main-4 /Users/uis/.pub-cache/hosted/pub.dev/permission_handler_android-12.0.6/android/src/main/res
+com.baseflow.permissionhandler.permission_handler_android-release-5 /Users/uis/.pub-cache/hosted/pub.dev/permission_handler_android-12.0.6/android/src/release/res
+com.baseflow.permissionhandler.permission_handler_android-pngs-6 /Users/uis/Desktop/EventApp/build/permission_handler_android/generated/res/pngs/release
+com.baseflow.permissionhandler.permission_handler_android-resValues-7 /Users/uis/Desktop/EventApp/build/permission_handler_android/generated/res/resValues/release
+com.baseflow.permissionhandler.permission_handler_android-rs-8 /Users/uis/Desktop/EventApp/build/permission_handler_android/generated/res/rs/release
+com.baseflow.permissionhandler.permission_handler_android-mergeReleaseResources-9 /Users/uis/Desktop/EventApp/build/permission_handler_android/intermediates/incremental/release/mergeReleaseResources/merged.dir
+com.baseflow.permissionhandler.permission_handler_android-mergeReleaseResources-10 /Users/uis/Desktop/EventApp/build/permission_handler_android/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+com.baseflow.permissionhandler.permission_handler_android-merged_res-11 /Users/uis/Desktop/EventApp/build/permission_handler_android/intermediates/merged_res/release

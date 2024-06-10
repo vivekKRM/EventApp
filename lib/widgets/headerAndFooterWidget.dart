@@ -1,5 +1,6 @@
 import 'package:event/constants/styles.dart';
 import 'package:event/utils/appManager.dart';
+import 'package:event/widgets/badge.dart';
 import 'package:event/widgets/customAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -110,137 +111,117 @@ class _HeaderAndFooterState extends State<HeaderAndFooter> {
     this.getPatientNameAndEmail();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return (this.widget.keepFooter
-        ? Scaffold(
-            appBar: PreferredSize(
-              
-              preferredSize: Size.fromHeight(60),
-              child: CustomAppbar(
-                leading: this.widget.leading ?? Container(),
-                titleText: this.widget.titleText,
-                context: context,
+ @override
+Widget build(BuildContext context) {
+  final size = MediaQuery.of(context).size;
+  return (this.widget.keepFooter
+      ? Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: CustomAppbar(
+              leading: this.widget.leading ?? Container(),
+              titleText: this.widget.titleText,
+              context: context,
+              rightButton: Badger(
+                child: IconButton(
+                  icon: Icon(Icons.notifications, color: Colors.black),
+                  onPressed: () {
+                    // Add your button action here
+                    print("Notifications button pressed");
+                  },
+                ),
+                value: '3', // Example badge value
               ),
             ),
-            // endDrawer:
-            // CustomDrawer(
-            //   fname: this.fname,
-            //   lname: this.lname,
-            //   email: this.email,
-            //   profilePic: this.profilePic,
-            //   patientGroupPatientVisit: this.patientGroupPatientVisit,
-            //   patientGroupPcpRequest: this.patientGroupPcpRequest,
-            //   appManager: this.widget.appManager,
-            // ),
-            extendBody: true,
-            extendBodyBehindAppBar: false,
-            body: this.widget.bodyWidget,
-            // floatingActionButtonLocation:
-            //     FloatingActionButtonLocation.centerDocked,
-            // floatingActionButton: FloatingActionButton(
-            //   shape: CircleBorder(),
-            //   child: Icon(
-            //     Icons.add,
-            //     color: Colors.white,
-            //   ),
-            //   backgroundColor: kFABColor,
-            //   // onPressed: this.widget.fabFunction,
-            //   onPressed: this.bottomPopUpWidget,
-            // ),
-            bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle: kBackTextStyle,
-              unselectedLabelStyle: kHeartRateTextTextStyle,
-              backgroundColor: Colors.white,
-              selectedItemColor: Colors.blue,
-              unselectedItemColor: Colors.grey,
-              showSelectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              showUnselectedLabels: false,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.lightGreen,
-                  icon: Icon(Icons.home),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.lightGreen,
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                ),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.lightGreen,
-                  icon: Icon(Icons.favorite),
-                  label: 'Like',
-                ),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.lightGreen,
-                  icon: Stack(
-                    children: [
-                      Icon(Icons.message),
-                      if (this.messageC > 0)
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Container(
-                            padding: EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            constraints: BoxConstraints(
-                              minWidth: 18,
-                              minHeight: 18,
-                            ),
-                            child: Center(
-                              // Center the text within the container
-                              child: Text(
-                                '${this.messageC}',
-                                style: kButtonSmallTextStyle.copyWith(
-                                    color: Colors
-                                        .white), // Set text color to white
-                                textAlign: TextAlign.center,
-                              ),
+          ),
+          extendBody: true,
+          extendBodyBehindAppBar: false,
+          body: this.widget.bodyWidget,
+          bottomNavigationBar: BottomNavigationBar(
+            selectedLabelStyle: kBackTextStyle,
+            unselectedLabelStyle: kHeartRateTextTextStyle,
+            backgroundColor: Colors.white,
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
+            showSelectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            showUnselectedLabels: false,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                backgroundColor: Colors.lightGreen,
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.lightGreen,
+                icon: Icon(Icons.search),
+                label: 'Connection',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.lightGreen,
+                icon: Stack(
+                  children: [
+                    Icon(Icons.message),
+                    if (this.messageC > 0)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 18,
+                            minHeight: 18,
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${this.messageC}',
+                              style: kButtonSmallTextStyle.copyWith(
+                                  color: Colors.white),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),
-                    ],
-                  ),
-                  label: 'Chat',
+                      ),
+                  ],
                 ),
-                BottomNavigationBarItem(
-                  backgroundColor: Colors.lightGreen,
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
+                label: 'Chat',
+              ),
+              BottomNavigationBarItem(
+                backgroundColor: Colors.lightGreen,
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+          ),
+        )
+      : Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60),
+            child: CustomAppbar(
+              leading: this.widget.leading ?? Container(),
+              titleText: this.widget.titleText,
+              context: context,
+              rightButton: Badger(
+                child: IconButton(
+                  icon: Icon(Icons.notifications, color: Colors.black),
+                  onPressed: () {
+                    // Add your button action here
+                    print("Notifications button pressed");
+                  },
                 ),
-              ],
-              currentIndex: _selectedIndex,
-              onTap: _onItemTapped,
-            ),
-          )
-        : Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(60),
-              child: CustomAppbar(
-                leading: this.widget.leading ?? Container(),
-                titleText: this.widget.titleText,
-                context: context,
+                value: '3', // Example badge value
               ),
             ),
-            // endDrawer:
-            // CustomDrawer(
-            //   fname: this.fname,
-            //   lname: this.lname,
-            //   email: this.email,
-            //   profilePic: this.profilePic,
-            //   patientGroupPatientVisit: this.patientGroupPatientVisit,
-            //   patientGroupPcpRequest: this.patientGroupPcpRequest,
-            //   appManager: this.widget.appManager,
-            // ),
-            extendBody: true,
-            extendBodyBehindAppBar: true,
-            body: this.widget.bodyWidget,
-          ));
-  }
+          ),
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          body: this.widget.bodyWidget,
+        ));
+}
 }
