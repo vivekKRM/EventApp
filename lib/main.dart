@@ -5,7 +5,6 @@ import 'package:event/integrated/Forget/forgetPassword.dart';
 import 'package:event/integrated/Login/login.dart';
 import 'package:event/integrated/OnBoarding/initial.dart';
 import 'package:event/integrated/Register/finalRegister.dart';
-import 'package:event/integrated/Register/register.dart';
 import 'package:event/utils/appManager.dart';
 import 'package:flutter/material.dart';
 // Added on 29 Feb
@@ -53,9 +52,9 @@ class _MyAppState extends State<MyApp> {
       '/forgetPassword': (context) =>
           ForgetPassword(title: 'Forget Password', appManager: appManager),
       '/home': (context) => DashboardScreen(
-          title: 'Home', appManager: appManager, isRegister: false),
-      '/register': (context) =>
-          Register(title: 'Register', appManager: appManager),
+          title: 'Home', appManager: appManager),
+      // '/register': (context) =>
+      //     Register(title: 'Register', appManager: appManager),
       '/fregister': (context) =>
           FinalRegister(title: 'Register', appManager: appManager),
       // Add more routes as needed

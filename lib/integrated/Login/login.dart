@@ -50,10 +50,10 @@ class _LoginState extends State<Login> {
           _loading = false;
         });
         prefs.setString('email', email);
-        prefs.setString('password', password);
-        prefs.setString('authToken', response?.token ?? '');
-        await widget.appManager.markLoggedIn(response?.token ?? '');
-        await widget.appManager.initSocket(response?.token ?? '');
+        prefs.setInt('sId', response?.data?.id ?? 0);
+        prefs.setString('authToken', response?.data?.token ?? '');
+        await widget.appManager.markLoggedIn(response?.data?.token ?? '');
+        await widget.appManager.initSocket(response?.data?.token ?? '');
         var loggedIn = await widget.appManager.hasLoggedIn();
         if (loggedIn['hasLoggedIn']) {
           Navigator.pushReplacementNamed(context, '/home', arguments: false);

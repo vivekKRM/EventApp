@@ -3,12 +3,16 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:event/constants/styles.dart';
-import 'package:event/integrated/Register/placeSearchScreen.dart';
 import 'package:event/utils/appManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FinalRegister extends StatefulWidget {
   FinalRegister({Key? key, required this.title, required this.appManager})
@@ -22,6 +26,10 @@ class FinalRegister extends StatefulWidget {
 }
 
 class _FinalRegisterState extends State<FinalRegister> {
+    late SharedPreferences prefs;
+      String email = '';
+
+
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   TextEditingController _locationController = TextEditingController();
@@ -32,8 +40,9 @@ class _FinalRegisterState extends State<FinalRegister> {
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _multiLineController = TextEditingController();
   int _characterCount = 0;
-  final String _apiKey = 'AIzaSyCrCGPXfswRFDdMzSdEaGBnZiz9LQNFTCA';
-  final Mode _mode = Mode.overlay;
+
+  static const kGoogleApiKey = "AIzaSyB7d4yI7ZmAGjDVpQHYM-aNo_UlfNCHtdk";
+  final GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 
   List<bool> isError = [
     false,
@@ -43,7 +52,6 @@ class _FinalRegisterState extends State<FinalRegister> {
     false,
     false,
   ];
-
 
   bool isValidForm() {
     isError.clear();
@@ -55,47 +63,34 @@ class _FinalRegisterState extends State<FinalRegister> {
       false,
       false,
     ];
-   if (_fnameController.text == '') {
-      showToast('Please enter first name', 2, kToastColor, context);
+    if (_fnameController.text == '') {
+      showToast('Please enter first name', 2, kToastColor, this.context);
       setState(() {
         isError[0] = true;
       });
       return false;
     } else if (_lnameController.text == '') {
-      showToast('Please enter last name', 2, kToastColor, context);
+      showToast('Please enter last name', 2, kToastColor, this.context);
       setState(() {
         isError[1] = true;
       });
       return false;
-    } else if (_titleController.text == '') {
-      showToast('Please enter title', 2, kToastColor, context);
-      setState(() {
-        isError[2] = true;
-      });
-      return false;
-    } else if (_companyController.text == '') {
-      showToast('Please enter company', 2, kToastColor, context);
-      setState(() {
-        isError[3] = true;
-      });
-      return false;
+    
     } else if (_locationController.text == '') {
-      showToast(
-          'Please select location', 2, kToastColor, context);
+      showToast('Please select location', 2, kToastColor, this.context);
       setState(() {
         isError[4] = true;
       });
       return false;
     } else if (_mobileController.text.length < 10) {
-      showToast(
-          'please enter valid mobile number', 2, kToastColor, context);
+      showToast('please enter valid mobile number', 2, kToastColor, this.context);
       setState(() {
         isError[5] = true;
       });
       return false;
     } else {
       print("Proceed");
-      FocusScope.of(context).unfocus();
+      FocusScope.of(this.context).unfocus();
       return true;
     }
   }
@@ -138,12 +133,6 @@ class _FinalRegisterState extends State<FinalRegister> {
     });
   }
 
-  void _updateCharacterCount() {
-    setState(() {
-      _characterCount = _multiLineController.text.length;
-    });
-  }
-
   Future<void> _showImagePickerDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
@@ -163,7 +152,6 @@ class _FinalRegisterState extends State<FinalRegister> {
                     style: kNamePainStyle,
                   ),
                   onTap: () {
-                    // _pickImages(ImageSource.camera);
                     _pickFromCamera();
                     Navigator.of(context).pop();
                   },
@@ -185,6 +173,109 @@ class _FinalRegisterState extends State<FinalRegister> {
         );
       },
     );
+  }
+
+  Future<void> displayPrediction(Prediction p, BuildContext context) async {
+    if (p.placeId != null) {
+      PlacesDetailsResponse detail =
+          await _places.getDetailsByPlaceId(p.placeId!);
+      final lat = detail.result.geometry!.location.lat;
+      final lng = detail.result.geometry!.location.lng;
+
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(p.description!),
+              content: Text("Latitude: $lat, Longitude: $lng"),
+              actions: [
+                TextButton(
+                  child: Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_image == null) {
+      showToast('Please select an image',
+       2, Colors.red, this.context);
+      return;
+    }
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse('https://app.ewomennetwork.com/ewomen/api/register'));
+
+    // Add headers if needed
+    request.headers.addAll({
+      'Authorization': 'Bearer YOUR_TOKEN',
+      'Content-Type': 'multipart/form-data',
+    });
+
+    // Add the image file to the request
+    File imageFile = File(_image!.path);
+    var mimeTypeData = lookupMimeType(imageFile.path, headerBytes: [0xFF, 0xD8])?.split('/');
+    request.files.add(http.MultipartFile(
+      'image', // Parameter name expected by the server
+      imageFile.readAsBytes().asStream(),
+      imageFile.lengthSync(),
+      filename: basename(imageFile.path),
+      contentType: MediaType(mimeTypeData![0], mimeTypeData[1]),
+    ));
+
+    // Add other form fields if needed
+    request.fields['first_name'] = _fnameController.text;
+    request.fields['last_name'] = _lnameController.text;
+    request.fields['location'] = _locationController.text;
+    request.fields['phone'] = _mobileController.text;
+    request.fields['title'] = _titleController.text;
+    request.fields['company'] = _companyController.text;
+    request.fields['description'] = _multiLineController.text;
+    request.fields['email'] = email;
+    request.fields['password'] = "123456";
+    request.fields['confirm_password'] = "123456";
+    request.fields['latitude'] = "22.987";
+    request.fields['longitude'] = "77.0987";
+
+    print(request);
+
+    // Send the request
+    var response = await request.send();
+    print(response);
+
+    // Handle the response
+    if (response.statusCode == 200) {
+      showToast('Image uploaded successfully', 2,
+       Colors.green, this.context);
+    } else {
+      showToast('Image upload failed with status: ${response.statusCode}',
+       2, Colors.red, this.context);
+    }
+  }
+
+  void _updateCharacterCount() {
+    setState(() {
+      _characterCount = _multiLineController.text.length;
+    });
+  }
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefs();
+  }
+
+  getPrefs() async {
+    this.prefs = await SharedPreferences.getInstance();
+    this.email = prefs.getString('email') ?? '';
   }
 
   @override
@@ -252,14 +343,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'First Name',
+                          hintText: 'First Name*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
-                        // onChanged: (value) {
-                        //   setState(() {
-                        //     email = value;
-                        //   });
-                        // },
                       ),
                     )
                   ],
@@ -284,14 +370,9 @@ class _FinalRegisterState extends State<FinalRegister> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'Last Name',
+                          hintText: 'Last Name*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
-                        // onChanged: (value) {
-                        //   setState(() {
-                        //     email = value;
-                        //   });
-                        // },
                       ),
                     )
                   ],
@@ -369,36 +450,13 @@ class _FinalRegisterState extends State<FinalRegister> {
                     Expanded(
                       child: TextFormField(
                         controller: _locationController,
-                        readOnly: true,
+                        readOnly: false,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'Search your location*',
+                          hintText: 'Your location*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
-                        onTapAlwaysCalled: true,
-                        onTap: () async {
-                          // final selectedPlace = await Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => PlaceSearchScreen()),
-                          // );
-                          // if (selectedPlace != null) {
-                          //   setState(() {
-                          //     _locationController.text =
-                          //         selectedPlace.description;
-                          //   });
-                          // }
-
-                          Prediction? p = await PlacesAutocomplete.show(
-                              context: context, apiKey: _apiKey, mode: _mode);
-                          // Do something with the selected prediction
-                          if (p != null) {
-                            // Set the selected place in the text field
-                            _locationController.text = p.description ?? '';
-                            // Navigator.pop(context, p);
-                          }
-                        },
                       ),
                     ),
                   ],
@@ -424,7 +482,7 @@ class _FinalRegisterState extends State<FinalRegister> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
-                          hintText: 'Mobile Number',
+                          hintText: 'Mobile Number*',
                           hintStyle: kLoginTextFieldTextStyle,
                         ),
                       ),
@@ -477,9 +535,10 @@ class _FinalRegisterState extends State<FinalRegister> {
                     backgroundColor: kButtonColor,
                   ),
                   child: Text('SignUp', style: kButtonTextStyle),
-                  onPressed: () {
+                  onPressed: () async {
                     if (isValidForm()) {
-                      Navigator.pushNamed(context, "/fregister");
+                      await _uploadImage();
+                      //Navigator.pushReplacementNamed(context, '/home', arguments: false);
                     }
                   },
                 ),

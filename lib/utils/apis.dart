@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:event/constants/styles.dart';
+import 'package:event/json/eventResponse.dart';
 import 'package:event/json/forgotResponse.dart';
 import 'package:event/json/getAcademic.dart';
 import 'package:event/json/getApplyJob.dart';
@@ -255,20 +256,20 @@ class Apis {
   }
 
   //Dashboard Get All Data
-  Future<LoginResponse?> getDashboardRequest(
-      Map<String, dynamic> requestBody, String bearerToken) async {
-    final String apiUrl = '${appManager.serverURL}/user_details';
-    var response = await http.post(Uri.parse(apiUrl),
+  Future<EventResponse?> getDashboardRequest(
+      Map<String, dynamic> requestBody, String bearerToken, String appVersion) async {
+    final String apiUrl = '${appManager.serverURL}/event_dashboard?app_version=" + $appVersion';
+    var response = await http.get(Uri.parse(apiUrl),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer $bearerToken",
-        },
-        body: jsonEncode(requestBody));
+          "Authorization": "Bearer $bearerToken",
+        },);
     print('Dashboard uriResponse ${response.body}');
     final jsonResponse = jsonDecode(response.body);
-    LoginResponse? profileResp = LoginResponse?.fromJson(jsonResponse);
+    EventResponse? profileResp = EventResponse?.fromJson(jsonResponse);
     return profileResp;
   }
+
 
   //Get Personal Data
   Future<PersonalResponse?> getPersonal(
